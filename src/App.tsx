@@ -74,7 +74,7 @@ const App: React.FC = () => {
 
           {/* Main content */}
           <div style={{ height:"calc(100vh-56px)",flex:1, display: "flex", flexDirection: "column" }}>
-            <header style={{ background: "#000",width:"100vh", color: "#fff", padding: "16px", fontWeight: "bold",boxSizing: "border-box" }}>
+            <header style={{ background: "#000",width:"100%", color: "#fff", padding: "16px", fontWeight: "bold",boxSizing: "border-box" }}>
               Company name
             </header>
             <main style={{ padding: "24px", background: "#fff", flex: 1 , overflowY: "auto", boxSizing: "border-box" }}>
