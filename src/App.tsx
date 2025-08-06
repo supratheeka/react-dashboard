@@ -1,19 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Dashboard from "./pages/Dashbord";
-import Orders from "./pages/Orders";
-import Reports from "./pages/Reports";
-import Integrations from "./pages/Integrations";
-import SocialEngagement from "./pages/SocialEngagement";
-import YearEndSale from "./pages/Year-endsale";
-import Settings from "./pages/Settings";
-import SignOut from "./pages/Sign out";
-import Custemers from "./pages/Custemers";
-import Currentmonth from "./pages/Currentmonth";
-import Lastquarter from "./pages/lastquarter";
+import { BrowserRouter as Router, Link } from "react-router-dom";
+import AppRoutes from "./pages/AppRoutes"; // Import your new routes file
 
-
-// Move linkStyle above App
 const linkStyle: React.CSSProperties = {
   display: "block",
   padding: "8px 16px",
@@ -22,49 +10,75 @@ const linkStyle: React.CSSProperties = {
   cursor: "pointer",
 };
 
+const menu = [
+  ["Dashboard", "/"],
+  ["Orders", "/orders"],
+  ["Customers", "/customers"],
+  ["Reports", "/reports"],
+  ["Integrations", "/integrations"],
+  [
+    ["Current month", "/current-month"],
+    ["Last quarter", "/last-quarter"],
+    ["Social engagement", "/social-engagement"],
+    ["Year-end sale", "/year-end-sale"],
+  ],
+];
+
 const App: React.FC = () => {
   return (
     <div className="App">
       <Router>
         <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
           {/* Sidebar */}
-          <aside style={{ width: "250px", background: "#f3f4f6", borderRight: "1px solid #ccc", display: "flex", flexDirection: "column" }}>
+          <aside style={{ width: "250px", background: "#f3f4f6", borderRight: "20px solid #ccc", display: "flex", flexDirection: "column",boxSizing: "border-box" }}>
             <div style={{ padding: "16px", fontWeight: "bold" }}>Menu</div>
             <nav style={{ flex: 1 }}>
-              {menuItems.map((val) => (
-                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                  <li><Link to="/" style={linkStyle}>{title}</Link></li>
-                  
-                </ul>
-              ))}
-
-             
+              
+              {menu.map((item, index) => {
+                // Handle nested menu group (string[][])
+                if (Array.isArray(item) && Array.isArray(item[0])) {
+                  return (
+                    <div key={index} style={{ padding: "8px 16px", fontWeight: "bold" }}>
+                      Saved Reports
+                      <div style={{ paddingLeft: "16px" }}>
+                        {(item as string[][]).map((subItem, subIndex) => (
+                          <Link key={subIndex} to={subItem[1]} style={linkStyle}>
+                            {subItem[0]}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                }
+                // Handle section title (string)
+                if (typeof item === "string") {
+                  return (
+                    <div key={index} style={{ padding: "8px 16px", fontWeight: "bold" }}>
+                      {item}
+                    </div>
+                  );
+                }
+                // Handle regular menu item (string[])
+                if (Array.isArray(item)) {
+                  const to = typeof item[1] === "string" ? item[1] : "/";
+                  return (
+                    <Link key={index} to={to} style={linkStyle}>
+                      {item[0]}
+                    </Link>
+                  );
+                }
+                return null;
+              })}
             </nav>
-            <div style={{ borderTop: "1px solid #ccc" }}>
-              <Link to="/settings" style={linkStyle}>Settings</Link>
-              <Link to="/sign-out" style={linkStyle}>Sign out</Link>
-            </div>
           </aside>
 
           {/* Main content */}
-          <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            <header style={{ background: "#000", color: "#fff", padding: "16px", fontWeight: "bold" }}>
+          <div style={{ height:"calc(100vh-56px)",flex:1, display: "flex", flexDirection: "column" }}>
+            <header style={{ background: "#000",width:"100vh", color: "#fff", padding: "16px", fontWeight: "bold",boxSizing: "border-box" }}>
               Company name
             </header>
-            <main style={{ padding: "24px", background: "#fff", flex: 1 }}>
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/customers" element={<Custemers />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="/integrations" element={<Integrations />} />
-                <Route path="/current-month" element={<Currentmonth />} />
-                <Route path="/last-quarter" element={<Lastquarter />} />
-                <Route path="/social-engagement" element={<SocialEngagement />} />
-                <Route path="/year-end-sale" element={<YearEndSale />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/sign-out" element={<SignOut />} />
-              </Routes>
+            <main style={{ padding: "24px", background: "#fff", flex: 1 , overflowY: "auto", boxSizing: "border-box" }}>
+              <AppRoutes />
             </main>
           </div>
         </div>
@@ -74,5 +88,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-
